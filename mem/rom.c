@@ -1,8 +1,18 @@
 #include "rom.h"
+#include "mem_mapper.h"
 #include <math.h>
+byte bios[BIOS_BANK_SIZE];
+byte rom[ROM_BANK_SIZE];
+byte wram[WRAM_BANK_SIZE];
+byte eram[ERAM_BANK_SIZE];
+byte vram[VRAM_BANK_SIZE];
+byte zram[ZRAM_BANK_SIZE];
+byte oam[OAM_BANK_SIZE];
+
 
 int load_rom(char* rom_name)
 {
+
 
     enum cart_type ctype;
     int rom_size;
@@ -79,7 +89,7 @@ int main()
 {
     load_rom("Tetris.gb");
     int i;
-    for(i = 0; i < 10; i++)
+    for(i = 0; i < 20; i++)
     {
         printf("0x%02X\n", rom[0x100 + i]);
     }

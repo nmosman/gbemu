@@ -1,90 +1,48 @@
-#ifdef __cplusplus
-    #include <cstdlib>
-#else
-    #include <stdlib.h>
-#endif
+#undef GLFW_DLL
+#include <GLFW/glfw3.h>
+#include <cstdlib>
+#include <iostream>
+using namespace std;
 
-#include <SDL/SDL.h>
+#define IMAGE_WIDTH     80
+#define IMAGE_HEIGHT    60
 
-int main ( int argc, char** argv )
-{
-    // initialize SDL video
-    if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+int main() {
+  if (!glfwInit()) {
+    cerr << "Can't initialize GLFW" << endl;
+    exit (EXIT_FAILURE);
+  }
+
+  
+  int nx = IMAGE_WIDTH;
+    int ny = IMAGE_HEIGHT;
+
+    // One time during setup.
+    unsigned int data[ny][nx][3];
+    for( size_t y = 0; y < ny; ++y )
     {
-        printf( "Unable to init SDL: %s\n", SDL_GetError() );
-        return 1;
-    }
-
-    // make sure SDL cleans up before exit
-    atexit(SDL_Quit);
-
-    // create a new window
-    SDL_Surface* screen = SDL_SetVideoMode(640, 480, 16,
-                                           SDL_HWSURFACE|SDL_DOUBLEBUF);
-    if ( !screen )
-    {
-        printf("Unable to set 640x480 video: %s\n", SDL_GetError());
-        return 1;
-    }
-
-    // load an image
-    SDL_Surface* bmp = SDL_LoadBMP("cb.bmp");
-    if (!bmp)
-    {
-        printf("Unable to load bitmap: %s\n", SDL_GetError());
-        return 1;
-    }
-    
-    // centre the bitmap on screen
-    SDL_Rect dstrect;
-    dstrect.x = (screen->w - bmp->w) / 2;
-    dstrect.y = (screen->h - bmp->h) / 2;
-
-    // program main loop
-    bool done = false;
-    while (!done)
-    {
-        // message processing loop
-        SDL_Event event;
-        while (SDL_PollEvent(&event))
+        for( size_t x = 0; x < nx; ++x )
         {
-            // check for messages
-            switch (event.type)
-            {
-                // exit if the window is closed
-            case SDL_QUIT:
-                done = true;
-                break;
-
-                // check for keypresses
-            case SDL_KEYDOWN:
-                {
-                    // exit if ESCAPE is pressed
-                    if (event.key.keysym.sym == SDLK_ESCAPE)
-                        done = true;
-                    break;
-                }
-            } // end switch
-        } // end of message processing
-
-        // DRAWING STARTS HERE
-        
-        // clear screen
-        SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
-
-        // draw bitmap
-        SDL_BlitSurface(bmp, 0, screen, &dstrect);
-
-        // DRAWING ENDS HERE
-
-        // finally, update the screen :)
-        SDL_Flip(screen);
-    } // end main loop
-
-    // free loaded bitmap
-    SDL_FreeSurface(bmp);
-
-    // all is well ;)
-    printf("Exited cleanly\n");
-    return 0;
-}
+            data[y][x][0] = ( rand() % 256 ) * 256 * 256 * 256;
+            data[y][x][1] = 0;
+            data[y][x][2] = 0;
+        }
+    }
+  GLFWwindow *win;
+  win = glfwCreateWindow (450, 500, "GBEmu Lite v.0.1", NULL, NULL);
+  glfwMakeContextCurrent(win);
+  while (!glfwWindowShouldClose(win)) {
+	  
+	  /* Render here */
+        glClear(GL_COLOR_BUFFER_BIT);
+    
+        glDrawPixels( nx, ny, GL_RGB, GL_UNSIGNED_INT, data );
+    
+        /* Swap front and back buffers */
+        glfwSwapBuffers(win);
+    glfwWaitEvents();
+  }
+  glfwDestroyWindow(win);
+  glfwTerminate();
+  return 0;
+} 

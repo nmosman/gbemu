@@ -2,18 +2,19 @@
 
 #define CLOCK_SPEED 4338000
 #define CYCLES_PER_FRAME CLOCK_SPEED/60
+
 void print_registers()
 {
-	printf("A = %#X\n", A);
-	printf("B = %#X\n", B);
-	printf("C = %#X\n", C);
-	printf("D = %#X\n", D);
-	printf("E = %#X\n", E);
-	printf("F = %#X\n", F);
-	printf("L = %#X\n", L);
-	printf("H = %#X\n", H);
-	printf("SP = %#X\n", SP);
-	printf("PC = %#X\n", PC);
+	printf("A = %#X\n", registers.af >> 8);
+	printf("B = %#X\n", registers.bc >> 8);
+	printf("C = %#X\n", registers.bc & 0x00FF);
+	printf("D = %#X\n", registers.de >> 8);
+	printf("E = %#X\n", registers.de & 0x00FF);
+	printf("F = %#X\n", registers.af & 0x00FF);
+	printf("L = %#X\n", registers.hl & 0x00FF);
+	printf("H = %#X\n", registers.hl >> 8);
+	printf("SP = %#X\n", registers.sp);
+	printf("PC = %#X\n", registers.pc);
 
 }
 
@@ -29,6 +30,10 @@ void emulate_loop()
 	}
 }
 
+void handle_undefined(){
+	
+	
+}
 int execute_opcode(byte opcode)
 {
 	int instruction_len = 0;

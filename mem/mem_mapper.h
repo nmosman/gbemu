@@ -1,7 +1,7 @@
 #ifndef MEM_H 
 #define MEM_H
-#include "utils.h"
-#include "cpu.h"
+#include "../utils/utils.h"
+#include "../core/cpu.h"
 
 
 /*

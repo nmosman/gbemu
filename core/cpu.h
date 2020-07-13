@@ -8,11 +8,11 @@
 #define C_FLAG	4
 
 
-#include "utils.h"
+#include "../utils/utils.h"
 
 //16-bit combined registers
 
-typedef struct _registers{
+typedef struct registers{
 	word pc;
 	word sp;
 	reg_word af;
@@ -25,7 +25,7 @@ extern gb_regs registers;
 
 
 
-
+void handle_undefined();
 void tick();
 void hard_reset();
 void initRegisters();
