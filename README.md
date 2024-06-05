@@ -6,3 +6,4 @@ A basic implementation of the classic Gameboy system. Currently no sound support
 - Pokemon Red
 
 
+Currently unfinished but hoping to pick this up again very soon! 
